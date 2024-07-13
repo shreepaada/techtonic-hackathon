@@ -1,43 +1,58 @@
 "use client";
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import styled from "styled-components";
+import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import styled, { createGlobalStyle } from "styled-components";
+import { gsap } from "gsap/dist/gsap";
+import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
+import Link from "next/link";
+
+gsap.registerPlugin(ScrollToPlugin);
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #000;
+    color: #fff;
+  }
+`;
 
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background-color: #fff;
-  color: #000;
+  background-color: #000;
+  color: #fff;
   position: fixed;
   width: 100%;
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-const Logo = styled.div`
-  font-size: 24px;
-  font-weight: bold;
+const LogoContainer = styled.div`
   display: flex;
   align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
 `;
 
 const Nav = styled.nav`
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-left: auto;
 `;
 
-const NavItem = styled(motion.a)`
+const NavItem = styled(motion.div)`
   font-size: 18px;
-  color: #000;
+  color: #fff;
   text-decoration: none;
   cursor: pointer;
   position: relative;
+  transition: color 0.4s ease;
 
   &:hover {
-    color: #ff8c00;
+    color: #888;
   }
 
   &::after {
@@ -48,14 +63,14 @@ const NavItem = styled(motion.a)`
     display: block;
     margin-top: 5px;
     right: 0;
-    background: #ff8c00;
+    background: #888;
     transition: width 0.4s ease;
   }
 
   &:hover::after {
     width: 100%;
     left: 0;
-    background: #ff8c00;
+    background: #888;
   }
 `;
 
@@ -75,7 +90,7 @@ const BurgerContainer = styled.div`
 const BurgerLine = styled(motion.div)`
   width: 100%;
   height: 2px;
-  background-color: #000;
+  background-color: #fff;
   border-radius: 2px;
 `;
 
@@ -93,7 +108,7 @@ const MobileMenuContainer = styled(motion.div)`
   z-index: 20;
 `;
 
-const MobileMenuItem = styled(motion.a)`
+const MobileMenuItem = styled(motion.div)`
   font-size: 24px;
   color: #fff;
   margin: 20px 0;
@@ -101,7 +116,7 @@ const MobileMenuItem = styled(motion.a)`
   cursor: pointer;
 
   &:hover {
-    color: #ff8c00;
+    color: #888;
   }
 `;
 
@@ -114,18 +129,92 @@ const menuVariants = {
   },
 };
 
+const logoLetterVariants = {
+  hidden: { opacity: 0, y: -50 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    color: "#b0c4de", // Metallic-like color
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: "easeInOut",
+      type: "spring",
+      stiffness: 300,
+    },
+  }),
+};
+
+const navItemVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.3, duration: 0.6, ease: "easeInOut" },
+  }),
+};
+
 const Header: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const logoText = "BUG BUSTERS";
+  const logoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (logoRef.current) {
+      const letters = logoRef.current.querySelectorAll("span");
+      gsap.fromTo(
+        letters,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.1,
+          ease: "bounce.out",
+          duration: 1,
+          color: "#b0c4de",
+        }
+      );
+    }
+  }, []);
 
   return (
     <>
+      <GlobalStyle />
       <HeaderContainer>
-        <Logo>CODE BUSTERS</Logo>
+        <LogoContainer ref={logoRef}>
+          {logoText.split("").map((letter, index) => (
+            <motion.span
+              key={index}
+              custom={index}
+              initial="hidden"
+              animate="visible"
+              variants={logoLetterVariants}
+              style={{ display: "inline-block", marginRight: "4px" }}
+              whileHover={{ scale: 1.2, color: "#ff8c00" }}
+            >
+              {letter}
+            </motion.span>
+          ))}
+        </LogoContainer>
         <Nav>
-          <NavItem href="#">Home</NavItem>
-          <NavItem href="#">About Us</NavItem>
-          <NavItem href="#">Sign Up</NavItem>
-          <NavItem href="#">Malicious_Url</NavItem>
+          {[
+            { label: "Home", href: "/intro" },
+            { label: "About Us", href: "/aboutus" },
+            { label: "Sign Up", href: "/loginpage" },
+            { label: "Malicious_Url", href: "/malicious" },
+          ].map((item, index) => (
+            <Link key={item.label} href={item.href} passHref>
+              <NavItem
+                custom={index}
+                initial="hidden"
+                animate="visible"
+                variants={navItemVariants}
+                whileHover={{ scale: 1.1, color: "#888" }}
+              >
+                {item.label}
+              </NavItem>
+            </Link>
+          ))}
         </Nav>
         <BurgerContainer onClick={() => setMenuOpen(!menuOpen)}>
           <BurgerLine
@@ -136,7 +225,7 @@ const Header: React.FC = () => {
             animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
           />
         </BurgerContainer>
-        <AnimatePresence>
+        <motion.div>
           {menuOpen && (
             <MobileMenuContainer
               initial="hidden"
@@ -144,21 +233,21 @@ const Header: React.FC = () => {
               exit="hidden"
               variants={menuVariants}
             >
-              <MobileMenuItem href="#" onClick={() => setMenuOpen(false)}>
-                Home
-              </MobileMenuItem>
-              <MobileMenuItem href="#" onClick={() => setMenuOpen(false)}>
-                About Us
-              </MobileMenuItem>
-              <MobileMenuItem href="#" onClick={() => setMenuOpen(false)}>
-                Sign Up
-              </MobileMenuItem>
-              <MobileMenuItem href="#" onClick={() => setMenuOpen(false)}>
-                Malicious_Url
-              </MobileMenuItem>
+              {[
+                { label: "Home", href: "/intro" },
+                { label: "About Us", href: "/aboutus" },
+                { label: "Sign Up", href: "/loginpage" },
+                { label: "Malicious_Url", href: "/malicious" },
+              ].map((item) => (
+                <Link key={item.label} href={item.href} passHref>
+                  <MobileMenuItem onClick={() => setMenuOpen(false)}>
+                    {item.label}
+                  </MobileMenuItem>
+                </Link>
+              ))}
             </MobileMenuContainer>
           )}
-        </AnimatePresence>
+        </motion.div>
       </HeaderContainer>
     </>
   );

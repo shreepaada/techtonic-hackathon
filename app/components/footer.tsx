@@ -2,22 +2,59 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styled, { keyframes } from "styled-components";
-import { FaInstagram, FaLinkedin, FaArrowUp } from "react-icons/fa";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { FiArrowUp } from "react-icons/fi";
+
+// Import GSAP and plugins dynamically
+import { gsap } from "gsap/dist/gsap";
+import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
+import { Flip } from "gsap/dist/Flip";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { Observer } from "gsap/dist/Observer";
+import { Draggable } from "gsap/dist/Draggable";
+import { MotionPathPlugin } from "gsap/dist/MotionPathPlugin";
+import { EaselPlugin } from "gsap/dist/EaselPlugin";
+import { PixiPlugin } from "gsap/dist/PixiPlugin";
+import { TextPlugin } from "gsap/dist/TextPlugin";
+
+gsap.registerPlugin(
+  ScrollToPlugin,
+  Flip,
+  ScrollTrigger,
+  Observer,
+  Draggable,
+  MotionPathPlugin,
+  EaselPlugin,
+  PixiPlugin,
+  TextPlugin
+);
 
 const FooterContainer = styled.footer`
   background-color: #111;
   color: #fff;
-  padding: 40px 20px;
+  padding: 20px 10px;
   text-align: center;
   position: relative;
   z-index: 10;
 `;
 
-const SocialIcons = styled.div`
+const SocialSection = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 80px;
+`;
+
+const SocialIconWithName = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const SocialIcons = styled.div`
+  display: flex;
   gap: 20px;
-  margin-bottom: 20px;
 `;
 
 const SocialIcon = styled(motion.a)`
@@ -29,6 +66,12 @@ const SocialIcon = styled(motion.a)`
   &:hover {
     color: #ff8c00;
   }
+`;
+
+const SectionDivider = styled.div`
+  width: 1px;
+  height: 50px;
+  background-color: #fff;
 `;
 
 const waveAnimation = keyframes`
@@ -50,8 +93,8 @@ const WaveEmoji = styled.span`
 
 const UpArrowContainer = styled(motion.div)`
   position: fixed;
-  bottom: 40px;
-  right: 40px;
+  bottom: 20px;
+  right: 20px;
   background: #ff8c00;
   border-radius: 50%;
   width: 50px;
@@ -61,6 +104,15 @@ const UpArrowContainer = styled(motion.div)`
   align-items: center;
   cursor: pointer;
   z-index: 20;
+  font-size: 24px;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #ff6500;
+  }
 `;
 
 const backgroundAnimation = keyframes`
@@ -83,37 +135,62 @@ const BackgroundAnimated = styled.div`
 
 const Footer: React.FC = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    gsap.to(window, { duration: 1, scrollTo: { y: 0, autoKill: true } });
   };
 
   return (
     <>
       <FooterContainer>
-        <SocialIcons>
-          <SocialIcon
-            href="https://instagram.com"
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.8 }}
-          >
-            <FaInstagram />
-          </SocialIcon>
-          <SocialIcon
-            href="https://linkedin.com"
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.8 }}
-          >
-            <FaLinkedin />
-          </SocialIcon>
-        </SocialIcons>
+        <SocialSection>
+          <SocialIconWithName>
+            <SocialIcons>
+              <SocialIcon
+                href="https://www.linkedin.com/in/shreepaada-m-c-520702285/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.8 }}
+              >
+                <FaLinkedin />
+              </SocialIcon>
+              <SocialIcon
+                href="https://github.com/shreepaada"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.8 }}
+              >
+                <FaGithub />
+              </SocialIcon>
+            </SocialIcons>
+            <p>Shreepaada</p>
+          </SocialIconWithName>
+          <SectionDivider />
+          <SocialIconWithName>
+            <SocialIcons>
+              <SocialIcon
+                href="https://github.com/Sourabh-Gor"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.8 }}
+              >
+                <FaLinkedin />
+              </SocialIcon>
+              <SocialIcon
+                href="https://github.com/Sourabh-Gor"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.8 }}
+              >
+                <FaGithub />
+              </SocialIcon>
+            </SocialIcons>
+            <p>Sourabh J Gor</p>
+          </SocialIconWithName>
+        </SocialSection>
         <p>
-          Made by <WaveEmoji>👋</WaveEmoji> Code Busters
+          Made with <WaveEmoji>👋</WaveEmoji> by Code Busters
         </p>
         <UpArrowContainer
           whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.8 }}
           onClick={scrollToTop}
         >
-          <FaArrowUp color="#fff" />
+          <FiArrowUp />
         </UpArrowContainer>
       </FooterContainer>
       <BackgroundAnimated />
