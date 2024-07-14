@@ -145,7 +145,27 @@ const Footer: React.FC = () => {
           <SocialIconWithName>
             <SocialIcons>
               <SocialIcon
-                href="https://www.linkedin.com/in/shreepaada-m-c-520702285/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                href="https://linkedin.com/in/sourabh"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.8 }}
+              >
+                <FaLinkedin />
+              </SocialIcon>
+              <SocialIcon
+                href="https://github.com/sourabh"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.8 }}
+              >
+                <FaGithub />
+              </SocialIcon>
+            </SocialIcons>
+            <p>Sourabh</p>
+          </SocialIconWithName>
+          <SectionDivider />
+          <SocialIconWithName>
+            <SocialIcons>
+              <SocialIcon
+                href="https://linkedin.com/in/shreepaada"
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.8 }}
               >
@@ -160,26 +180,6 @@ const Footer: React.FC = () => {
               </SocialIcon>
             </SocialIcons>
             <p>Shreepaada</p>
-          </SocialIconWithName>
-          <SectionDivider />
-          <SocialIconWithName>
-            <SocialIcons>
-              <SocialIcon
-                href="https://github.com/Sourabh-Gor"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.8 }}
-              >
-                <FaLinkedin />
-              </SocialIcon>
-              <SocialIcon
-                href="https://github.com/Sourabh-Gor"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.8 }}
-              >
-                <FaGithub />
-              </SocialIcon>
-            </SocialIcons>
-            <p>Sourabh J Gor</p>
           </SocialIconWithName>
         </SocialSection>
         <p>

@@ -36,6 +36,22 @@ const LogoContainer = styled.div`
   color: #fff;
 `;
 
+const Icon = styled(motion.div)`
+  width: 50px;
+  height: 50px;
+  background: #fff; /* White background inside */
+  color: #555555; /* Darker grey text color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 3px solid #555555; /* Darker grey border */
+`;
+
 const Nav = styled.nav`
   display: flex;
   align-items: center;
@@ -52,7 +68,7 @@ const NavItem = styled(motion.div)`
   transition: color 0.4s ease;
 
   &:hover {
-    color: #888;
+    color: #ffa500;
   }
 
   &::after {
@@ -63,14 +79,14 @@ const NavItem = styled(motion.div)`
     display: block;
     margin-top: 5px;
     right: 0;
-    background: #888;
+    background: #ffa500;
     transition: width 0.4s ease;
   }
 
   &:hover::after {
     width: 100%;
     left: 0;
-    background: #888;
+    background: #ffa500;
   }
 `;
 
@@ -116,7 +132,7 @@ const MobileMenuItem = styled(motion.div)`
   cursor: pointer;
 
   &:hover {
-    color: #888;
+    color: #ffa500;
   }
 `;
 
@@ -182,6 +198,22 @@ const Header: React.FC = () => {
       <GlobalStyle />
       <HeaderContainer>
         <LogoContainer ref={logoRef}>
+          <Icon
+            initial={{ scale: 0 }}
+            animate={{ rotate: 360, scale: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+              duration: 1,
+            }}
+            whileHover={{
+              scale: 1.1,
+              transition: { yoyo: Infinity, duration: 0.6 },
+            }}
+          >
+            BB
+          </Icon>
           {logoText.split("").map((letter, index) => (
             <motion.span
               key={index}
@@ -200,7 +232,7 @@ const Header: React.FC = () => {
           {[
             { label: "Home", href: "/intro" },
             { label: "About Us", href: "/aboutus" },
-            { label: "Sign Up", href: "/loginpage" },
+            { label: "Sign In", href: "/loginpage" },
             { label: "Malicious_Url", href: "/malicious" },
           ].map((item, index) => (
             <Link key={item.label} href={item.href} passHref>
@@ -209,7 +241,7 @@ const Header: React.FC = () => {
                 initial="hidden"
                 animate="visible"
                 variants={navItemVariants}
-                whileHover={{ scale: 1.1, color: "#888" }}
+                whileHover={{ scale: 1.1, color: "#ffa500" }}
               >
                 {item.label}
               </NavItem>

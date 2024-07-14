@@ -13,6 +13,7 @@ import {
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { TextPlugin } from "gsap/dist/TextPlugin";
+import Link from "next/link";
 
 gsap.registerPlugin(TextPlugin);
 
@@ -65,17 +66,41 @@ const Text = styled.p`
   font-size: 16px;
   line-height: 1.6;
   color: #333;
+  text-align: justify; /* Justify the text */
 `;
 
 const HeadingContainer = styled.div`
   display: flex;
   overflow: hidden;
+  flex-wrap: wrap;
 `;
 
 const HeadingLetter = styled(motion.span)`
   font-size: 32px;
   font-weight: bold;
   color: #333;
+  margin-right: 5px;
+  margin-left: 5px;
+`;
+
+const ModernButton = styled(motion.a)`
+  display: inline-block;
+  background: linear-gradient(45deg, #555555, #888888);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    color: #fff;
+  }
 `;
 
 const Particles = styled.div`
@@ -234,10 +259,28 @@ const Geometry: React.FC<GeometryProps> = ({
   );
 };
 
+const buttonVariants = {
+  rest: {
+    scale: 1,
+    background: "linear-gradient(45deg, #555555, #888888)",
+    color: "#fff",
+    transition: { duration: 0.5 },
+  },
+  hover: {
+    scale: 1.1,
+    background: "linear-gradient(45deg, #ff6f61, #ffa500)",
+    color: "#fff",
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut",
+    },
+  },
+};
+
 const Intro: React.FC = () => {
   const headingText = "Malicious URL Detection with Machine Learning";
-  const letters = headingText.split("");
-
+  const words = headingText.split("  ");
+  const letters = words.join(" ").split(" ");
   return (
     <IntroContainer>
       <BackgroundAnimation
@@ -255,14 +298,14 @@ const Intro: React.FC = () => {
               <HeadingLetter
                 key={index}
                 initial={{ rotateY: -90, color: "#000" }}
-                animate={{ rotateY: 0, color: "#8a8386" }}
+                animate={{ rotateY: 0, color: "#484848" }}
                 transition={{
                   duration: 0.5,
                   ease: "easeOut",
                   delay: index * 0.1,
                 }}
               >
-                {letter}
+                {letter === " " ? "\u00A0" : letter}
               </HeadingLetter>
             ))}
           </HeadingContainer>
@@ -283,6 +326,16 @@ const Intro: React.FC = () => {
               accuracy. This technology plays a vital role in protecting users
               and networks from phishing, malware, and other cyber threats.
             </Text>
+            <Link href="/malicious" passHref>
+              <ModernButton
+                as={motion.a}
+                variants={buttonVariants}
+                initial="rest"
+                whileHover="hover"
+              >
+                Try It Out
+              </ModernButton>
+            </Link>
           </Content>
         </ContentContainer>
         <Canvas style={{ width: "50%", height: "400px" }}>

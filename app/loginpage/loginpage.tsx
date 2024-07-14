@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 import "tailwindcss/tailwind.css";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   display: flex;
@@ -107,25 +109,69 @@ const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const router = useRouter();
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const username = (form.elements.namedItem("username") as HTMLInputElement)
+      .value;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else {
-      setErrorMessage("");
-      setShowPopup(true);
-      setPopupMessage("Registration successful!");
-      setTimeout(() => setShowPopup(false), 3000);
+      try {
+        const response = await axios.post("/api/register", {
+          username: username,
+          email: email,
+          password: password,
+        });
+        if (response.data.status === "success") {
+          setErrorMessage("");
+          setShowPopup(true);
+          setPopupMessage("Registration successful!");
+          setTimeout(() => {
+            setShowPopup(false);
+            setIsRegister(false);
+          }, 3000);
+        }
+      } catch (error) {
+        setErrorMessage("Registration failed");
+      }
     }
   };
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setShowPopup(true);
-    setPopupMessage("Login successful!");
-    setTimeout(() => setShowPopup(false), 3000);
+    const form = e.target as HTMLFormElement;
+    const username = (form.elements.namedItem("username") as HTMLInputElement)
+      .value;
+
+    try {
+      const response = await axios.post("/api/login", {
+        username: username,
+        password: password,
+      });
+      if (response.data.status === "success") {
+        localStorage.setItem("auth_token", response.data.token);
+        setShowPopup(true);
+        setPopupMessage("Login successful!");
+        setTimeout(() => {
+          setShowPopup(false);
+          router.push("/profile");
+        }, 3000);
+      }
+    } catch (error) {
+      setErrorMessage("Login failed");
+    }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("auth_token")) {
+      router.push("/profile");
+    }
+  }, []);
 
   return (
     <Container>
@@ -147,7 +193,13 @@ const LoginPage: React.FC = () => {
                 Sign in or create account
               </h3>
               <Form onSubmit={handleLoginSubmit}>
-                <Input type="text" placeholder="Enter mobile number or email" />
+                <Input type="text" placeholder="Username" name="username" />
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <Button type="submit">Continue</Button>
                 <InfoText>
                   By continuing, you agree to our{" "}
@@ -169,9 +221,8 @@ const LoginPage: React.FC = () => {
             <motion.div>
               <h3 className="text-xl font-semibold mb-4">Create account</h3>
               <Form onSubmit={handleRegisterSubmit}>
-                <Input type="text" placeholder="Your Name" />
-                <Input type="email" placeholder="Email" />
-                <Input type="text" placeholder="Phone Number" />
+                <Input type="text" placeholder="Your Name" name="username" />
+                <Input type="email" placeholder="Email" name="email" />
                 <Input
                   type="password"
                   placeholder="Password"

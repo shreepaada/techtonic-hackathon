@@ -1,4 +1,3 @@
-// AboutUs.tsx
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,6 +19,12 @@ const Title = styled.h2`
   font-size: 36px;
   margin-bottom: 20px;
   color: #000;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const Letter = styled(motion.span)`
+  display: inline-block;
 `;
 
 const Text = styled.p`
@@ -55,6 +60,11 @@ const Name = styled.h3`
 `;
 
 const AboutUs: React.FC = () => {
+  const headingText1 = "About Malicious URL Detection with Machine Learning";
+  const headingText2 = "Our Team";
+  const letters1 = headingText1.split("");
+  const letters2 = headingText2.split("");
+
   return (
     <AboutContainer>
       <Section>
@@ -65,7 +75,24 @@ const AboutUs: React.FC = () => {
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5 }}
           >
-            <Title>About Malicious URL Detection with Machine Learning</Title>
+            <Title>
+              {letters1.map((letter, index) => (
+                <Letter
+                  key={index}
+                  initial={{ y: -50, opacity: 0, color: "#000" }}
+                  animate={{ y: 0, opacity: 1, color: "#8a8386" }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 10,
+                    duration: 0.8,
+                    delay: index * 0.1,
+                  }}
+                >
+                  {letter === " " ? "\u00A0" : letter}
+                </Letter>
+              ))}
+            </Title>
             <Text>
               Malicious URL detection is a crucial task in cybersecurity, aiming
               to identify and block harmful websites before they can cause
@@ -88,14 +115,35 @@ const AboutUs: React.FC = () => {
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5 }}
           >
-            <Title>Our Team</Title>
+            <Title>
+              {letters2.map((letter, index) => (
+                <Letter
+                  key={index}
+                  initial={{ y: -50, opacity: 0, color: "#000" }}
+                  animate={{ y: 0, opacity: 1, color: "#8a8386" }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 10,
+                    duration: 0.8,
+                    delay: index * 0.1,
+                  }}
+                >
+                  {letter === " " ? "\u00A0" : letter}
+                </Letter>
+              ))}
+            </Title>
             <ImageContainer>
               <ImageWrapper>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.5, type: "spring", stiffness: 300 }}
+                  transition={{
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 300,
+                  }}
                 >
                   <Image src="/photos/shreepaada.jpg" alt="Shreepaada M C" />
                   <Name>Shreepaada M C</Name>
@@ -106,9 +154,13 @@ const AboutUs: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.5, type: "spring", stiffness: 300 }}
+                  transition={{
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 300,
+                  }}
                 >
-                  <Image src="/photos/sourabh2.jpg" alt="Sourabh J Gor" />
+                  <Image src="/photos/sourabh3.jpg" alt="Sourabh J Gor" />
                   <Name>Sourabh J Gor</Name>
                 </motion.div>
               </ImageWrapper>
