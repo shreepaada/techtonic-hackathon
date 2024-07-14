@@ -6,6 +6,8 @@ import "tailwindcss/tailwind.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
+
+const api_url = "http://127.0.0.1:5000/"
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -34,7 +36,7 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  color: black; /* Added this line to change text color to black */
+  color: black;
 `;
 
 const Button = styled.button`
@@ -123,12 +125,26 @@ const LoginPage: React.FC = () => {
       setErrorMessage("Passwords do not match");
     } else {
       try {
-        const response = await axios.post("/api/register", {
-          username: username,
-          email: email,
-          password: password,
-        });
-        if (response.data.status === "success") {
+        
+        const response = await axios.post(
+          `${api_url}api/register`,
+          {
+            username: username,
+            email: email,
+            password: password,
+          },
+          {
+            withCredentials: true, // Enable sending cookies cross-origin
+            headers: {
+              'Content-Type': 'application/json',
+              // Add CORS headers here if necessary
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+              'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+            },
+          }
+        );
+       if (response.data.status === "success") {
           setErrorMessage("");
           setShowPopup(true);
           setPopupMessage("Registration successful!");
@@ -150,9 +166,19 @@ const LoginPage: React.FC = () => {
       .value;
 
     try {
-      const response = await axios.post("/api/login", {
-        username: username,
-        password: password,
+      const response = await axios.post(`${api_url}api/login`,
+        {
+          username: username,
+          password: password,
+        },
+        {
+          withCredentials: true, // Enable sending cookies cross-origin
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          },
       });
       if (response.data.status === "success") {
         localStorage.setItem("auth_token", response.data.token);

@@ -33,7 +33,7 @@ const LogoutButton = styled.button`
     background-color: #d32f2f;
   }
 `;
-
+const api_url = "http://127.0.0.1:5000/"
 const Profile: React.FC = () => {
   const [history, setHistory] = useState<string[]>([]);
   const router = useRouter();
@@ -62,7 +62,7 @@ const Profile: React.FC = () => {
     try {
       const token = localStorage.getItem("auth_token");
       await axios.post(
-        "/api/logout",
+        `${api_url}api/logout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
