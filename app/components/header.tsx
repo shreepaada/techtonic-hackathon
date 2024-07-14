@@ -233,7 +233,7 @@ const Header: React.FC = () => {
             { label: "Home", href: "/intro" },
             { label: "About Us", href: "/aboutus" },
             { label: "Sign In", href: "/loginpage" },
-            { label: "Malicious_Url", href: "/malicious" },
+            { label: "Malicious_Url", href: "/malacious" },
           ].map((item, index) => (
             <Link key={item.label} href={item.href} passHref>
               <NavItem
@@ -269,7 +269,7 @@ const Header: React.FC = () => {
                 { label: "Home", href: "/intro" },
                 { label: "About Us", href: "/aboutus" },
                 { label: "Sign Up", href: "/loginpage" },
-                { label: "Malicious_Url", href: "/malicious" },
+                { label: "Malicious_Url", href: "/malaciousurl" },
               ].map((item) => (
                 <Link key={item.label} href={item.href} passHref>
                   <MobileMenuItem onClick={() => setMenuOpen(false)}>

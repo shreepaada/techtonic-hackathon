@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const withAuth = (WrappedComponent: React.ComponentType) => {

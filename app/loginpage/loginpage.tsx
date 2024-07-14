@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 import "tailwindcss/tailwind.css";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Container = styled.div`
   display: flex;
