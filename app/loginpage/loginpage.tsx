@@ -34,6 +34,7 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
+  color: black; /* Added this line to change text color to black */
 `;
 
 const Button = styled.button`
@@ -171,7 +172,7 @@ const LoginPage: React.FC = () => {
     if (localStorage.getItem("auth_token")) {
       router.push("/profile");
     }
-  }, []);
+  }, [router]);
 
   return (
     <Container>
