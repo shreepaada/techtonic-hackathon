@@ -326,7 +326,7 @@ const Intro: React.FC = () => {
               accuracy. This technology plays a vital role in protecting users
               and networks from phishing, malware, and other cyber threats.
             </Text>
-            <Link href="/malicious" passHref>
+            <Link href="/malacious" passHref>
               <ModernButton
                 as={motion.a}
                 variants={buttonVariants}
